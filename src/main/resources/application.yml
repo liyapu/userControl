@@ -1,0 +1,10 @@
+
+server:
+  port: 8095
+
+spring:
+  profiles:
+    active: @profile.active@ #此处由maven的环境选择决定
+#开启spring boot 的debug模式
+debug: true
+#trace: true
