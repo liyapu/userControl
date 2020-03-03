@@ -37,9 +37,9 @@ public class Subuser implements Serializable {
     private String password;
 
     /**
-     * 父id
+     * 主账号id
      */
-    private Integer parentId;
+    private Integer masterId;
 
     /**
      * 0-未登录，1-已登陆

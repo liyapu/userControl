@@ -28,7 +28,7 @@ public class SubuserVo implements Serializable {
 
     private Integer id;
 
-            @ApiModelProperty(value = "用户名", position = 1)
+    @ApiModelProperty(value = "用户名", position = 1)
     private String username;
 
             @ApiModelProperty(value = "用户密码", position = 2)

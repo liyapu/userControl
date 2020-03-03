@@ -29,16 +29,11 @@ public class RelationModel implements Serializable {
     private Integer id;
 
     @ApiModelProperty(value = "用户名", position = 1)
-    private String uesrname;
+    private String username;
 
-    @ApiModelProperty(value = "主子标识  o-父，1-子", position = 2)
-    private Integer isState;
+    @ApiModelProperty(value = "是否是主账户 0:不是 1:是", position = 2)
+    private Integer masterId;
 
-    @ApiModelProperty(value = "创建时间", position = 3)
-    private LocalDateTime createTime;
-
-    @ApiModelProperty(value = "更新时间", position = 4)
-    private LocalDateTime updateTime;
 
 
 }

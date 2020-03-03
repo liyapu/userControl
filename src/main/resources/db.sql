@@ -26,13 +26,13 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `relation`;
 CREATE TABLE `relation` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `uesrname` varchar(64) NOT NULL COMMENT '用户名',
-  `is_state` int(1) NOT NULL COMMENT '主子标识  o-父，1-子',
+  `username` varchar(64) NOT NULL COMMENT '用户名',
+  `master` int(1) NOT NULL COMMENT '是否是主账户 0:不是 1:是',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='主子关系表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='主子关系表'
 
 -- ----------------------------
 -- Table structure for subuser
@@ -42,14 +42,14 @@ CREATE TABLE `subuser` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(64) NOT NULL COMMENT '用户名',
   `password` varchar(64) NOT NULL COMMENT '用户密码',
-  `parent_id` int(16) NOT NULL COMMENT '父id',
-  `login_state` int(1) DEFAULT NULL COMMENT '0-未登录，1-已登陆',
+  `master_id` int(16) NOT NULL COMMENT '主账户id',
+  `login_state` int(1) NOT NULL DEFAULT '0' COMMENT '0-未登录，1-已登陆',
+  `status` int(11) NOT NULL COMMENT '用户状态 0:无效  1:有效',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
-  `status` int(11) NOT NULL COMMENT '用户状态 0:无效  1:有效',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='子用户表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='子用户表'
 
 -- ----------------------------
 -- Table structure for user

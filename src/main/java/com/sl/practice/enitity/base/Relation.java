@@ -29,12 +29,12 @@ public class Relation implements Serializable {
     /**
      * 用户名
      */
-    private String uesrname;
+    private String username;
 
     /**
-     * 主子标识  o-父，1-子
+     * 是否是主账户 0:不是 1:是
      */
-    private Integer isState;
+    private Integer master;
 
     /**
      * 创建时间

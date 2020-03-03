@@ -26,32 +26,14 @@ public class UserModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "自增id", position = 0)
-    private Integer id;
-
     @ApiModelProperty(value = "用户名", position = 1)
     private String username;
 
-    @ApiModelProperty(value = "用户密码", position = 2)
-    private String password;
 
-    @ApiModelProperty(value = "子账号人数", position = 3)
-    private Integer subNum;
-
-    @ApiModelProperty(value = "手机号", position = 4)
+    @ApiModelProperty(value = "手机号", position = 2)
     private String phoneNumber;
 
-    @ApiModelProperty(value = "登陆状态  0-未登录，1-已登陆", position = 5)
-    private Integer loginState;
-
-    @ApiModelProperty(value = "用户状态 0:无效  1:有效", position = 6)
-    private Integer status;
-
-    @ApiModelProperty(value = "创建时间", position = 7)
-    private LocalDateTime createTime;
-
-    @ApiModelProperty(value = "更新时间", position = 8)
-    private LocalDateTime updateTime;
+    private String isMaster;
 
 
 }
