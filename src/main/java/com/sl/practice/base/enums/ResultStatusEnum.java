@@ -11,6 +11,8 @@ public enum ResultStatusEnum {
     SUCCESS_SAVE(200, "保存成功"),
     SUCCESS_UPDATE(200, "更新成功"),
     SUCCESS_DELETE(200, "删除成功"),
+    SUCCESS_LOGIN(200, "登录成功"),
+    SUCCESS_LOGOUT(200, "退出成功"),
 
 
     HTTP_ERROR_100(100, "1XX错误"),

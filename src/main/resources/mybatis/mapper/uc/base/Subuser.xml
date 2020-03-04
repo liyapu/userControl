@@ -99,6 +99,11 @@
         </foreach>
     </delete>
 
+    <delete id="deleteByUsername">
+        DELETE FROM subuser
+        WHERE username = #{username}
+    </delete>
+
 </mapper>
 
 

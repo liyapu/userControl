@@ -49,8 +49,9 @@
         UPDATE user
         SET username = #{username},
           sub_num = #{subNum},
-          tread = #{tread},
-          status = #{status},
+          phone_number = #{phoneNumber},
+          login_state = #{loginState},
+          status = #{status}
           update_time = now()
         WHERE id = #{id}
   </update>
@@ -118,6 +119,12 @@
         FROM user
         WHERE phone_number = #{phoneNumber}
     </select>
+    <select id="selectByUsername" resultType="com.sl.practice.enitity.base.User">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user
+        WHERE username = #{username}
+    </select>
 
     <delete id="deleteById">
         DELETE FROM user
@@ -130,6 +137,11 @@
         <foreach collection="ids" item="id" index="index" open="(" separator="," close=")">
             #{id}
         </foreach>
+    </delete>
+
+    <delete id="deleteByUsername">
+        DELETE FROM user
+        WHERE username = #{username}
     </delete>
 
 

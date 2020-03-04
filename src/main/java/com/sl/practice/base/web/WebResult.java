@@ -71,7 +71,13 @@ public class WebResult<T> implements Serializable {
     public static WebResult<String> successDelete(){
         return success(ResultStatusEnum.SUCCESS_DELETE);
     }
+    public static WebResult<String> successLogin(){
+        return success(ResultStatusEnum.SUCCESS_LOGIN);
+    }
 
+    public static WebResult<String> successLogout(){
+        return success(ResultStatusEnum.SUCCESS_LOGOUT);
+    }
     public static  WebResult<String> failed(){
         return failed(CODE_FAILED);
     }

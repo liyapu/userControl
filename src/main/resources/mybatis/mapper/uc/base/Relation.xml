@@ -87,4 +87,9 @@
         </foreach>
     </delete>
 
+    <delete id="deleteByUsername">
+        DELETE FROM relation
+        WHERE username = #{username}
+    </delete>
+
 </mapper>

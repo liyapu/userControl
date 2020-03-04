@@ -1,8 +1,10 @@
 package com.sl.practice.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.sl.practice.base.exception.BusinessException;
 import com.sl.practice.base.utils.CommonUtil;
 import com.sl.practice.base.utils.Md5Utils;
+import com.sl.practice.base.web.PageInfo;
 import com.sl.practice.enitity.base.Relation;
 import com.sl.practice.enitity.base.Subuser;
 import com.sl.practice.enitity.base.User;
@@ -11,7 +13,9 @@ import com.sl.practice.mapper.base.RelationMapper;
 import com.sl.practice.mapper.base.SubuserMapper;
 import com.sl.practice.mapper.base.UserMapper;
 import com.sl.practice.service.UserService;
+import com.sl.practice.web.model.LoginModel;
 import com.sl.practice.web.model.UserModel;
+import com.sl.practice.web.model.UserPageQuery;
 import com.sl.practice.web.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.units.qual.A;
@@ -65,6 +69,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public PageInfo<UserVo> getByPage(UserPageQuery userPageQuery) {
+        userPageQuery.setStatus(StatusEnum.YES.getCode());
+        userPageQuery.setOrderBy("id DESC");
+        PageHelper.startPage(userPageQuery.getPageNum(),userPageQuery.getPageSize());
+        List<User> userList = userMapper.listByPage(userPageQuery);
+
+        List<UserVo> voList = userList.stream()
+                .map(entry -> {
+                    UserVo vo = new UserVo();
+                    BeanUtils.copyProperties(entry, vo);
+                    return vo;
+                }).collect(Collectors.toList());
+
+        return PageInfo.of(userList,voList);
+   }
+
+    @Override
     public boolean save(UserModel userModel) {
        User user = new User();
        String username = userModel.getUsername();
@@ -81,6 +102,10 @@ public class UserServiceImpl implements UserService {
        }
        username = username.trim();
        password = password.trim();
+
+       if(password.length() < 6){
+           throw BusinessException.build("密码长度至少为6位");
+       }
 
        BeanUtils.copyProperties(userModel,user);
 
@@ -151,6 +176,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deleteById(Integer id) {
+
        int rows  = userMapper.deleteById(id);
        return rows > 0;
     }
@@ -160,4 +186,61 @@ public class UserServiceImpl implements UserService {
       int rows  = userMapper.deleteBatchIds(ids);
       return rows > 0;
     }
+
+    @Override
+    public boolean deleteByUsername(String username) {
+       int rows = 0;
+        Relation relation = relationMapper.selectByUsername(username);
+        if(null != relation){
+            if(StatusEnum.YES.getCode() == relation.getMaster().intValue()){
+                 rows = userMapper.deleteByUsername(username);
+            }else{
+                rows = subuserMapper.deleteByUsername(username);
+            }
+            relationMapper.deleteByUsername(username);
+        }
+        return rows > 0;
+    }
+
+    @Override
+    public boolean login(LoginModel loginModel) {
+       String username = loginModel.getUsername();
+       String password = loginModel.getPassword();
+       if(StringUtils.isAnyBlank(username,password)){
+           throw BusinessException.build("用户名或密码错误");
+       }
+        username = username.trim();
+        password = password.trim();
+
+        User user = userMapper.selectByUsername(username);
+        if(null == user){
+            throw BusinessException.build("用户名或密码错误");
+        }
+        if(!Md5Utils.verify(password,user.getPassword())){
+            throw BusinessException.build("用户名或密码错误");
+        }
+
+        User userTemp = new User();
+        userTemp.setId(user.getId());
+        userTemp.setLoginState(StatusEnum.YES.getCode());
+        userMapper.updateByIdSelective(userTemp);
+        return true;
+    }
+
+    @Override
+    public boolean logout(String username) {
+       if(StringUtils.isBlank(username)){
+           throw BusinessException.build("用户名错误");
+       }
+        username = username.trim();
+        User user = userMapper.selectByUsername(username);
+        if(null == user){
+            throw BusinessException.build("用户错误");
+        }
+        User userTemp = new User();
+        userTemp.setId(user.getId());
+        userTemp.setLoginState(StatusEnum.NO.getCode());
+        userMapper.updateByIdSelective(userTemp);
+        return true;
+   }
 }

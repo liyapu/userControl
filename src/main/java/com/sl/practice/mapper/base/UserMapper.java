@@ -26,6 +26,13 @@ public interface UserMapper {
     User selectById(@Param("id") Integer id);
 
     /**
+     * 根据 username 查询
+     *
+     * @param username
+     */
+    User selectByUsername(@Param("username") String username);
+
+    /**
      * 查询（根据ID 批量查询）
      *
      * @param idList 主键ID列表(不能为 null 以及 empty)
@@ -102,6 +109,14 @@ public interface UserMapper {
      * @param idList 主键ID列表(不能为 null 以及 empty)
      */
     int deleteBatchIds(@Param("ids") Collection<? extends Serializable> idList);
+
+
+    /**
+     * 根据 username 删除
+     *
+     * @param username
+     */
+    int deleteByUsername(String username);
 
 
 }

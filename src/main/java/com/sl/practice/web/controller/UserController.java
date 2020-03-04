@@ -1,8 +1,10 @@
 package com.sl.practice.web.controller;
 
+import com.sl.practice.base.web.PageInfo;
 import com.sl.practice.base.web.WebResult;
 import com.sl.practice.service.UserService;
 import com.sl.practice.web.model.UserModel;
+import com.sl.practice.web.model.UserPageQuery;
 import com.sl.practice.web.vo.UserVo;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +64,17 @@ public class UserController {
       return WebResult.success(userVoList);
    }
 
+    @ApiOperation(value = "根据多个条件 分页查询", notes = "返回复杂的分页参数对象", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiResponses({
+            @ApiResponse(code = WebResult.CODE_SUCCESS, message = "查询成功"),
+    })
+    @ApiImplicitParam(name = "userPageQuery", value = "分页查询条件参数", required = true, dataType = "UserPageQuery")
+    @PostMapping("/getByPage")
+    public WebResult<PageInfo<UserVo>> getByPage(UserPageQuery userPageQuery){
+        PageInfo<UserVo> userVoPageInfo = userService.getByPage(userPageQuery);
+        return WebResult.success(userVoPageInfo);
+    }
+
 
     @ApiOperation(value = "新增保存一条记录",  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiResponses({
@@ -85,36 +98,52 @@ public class UserController {
      }
 
 
-     @ApiOperation(value = "根据id删除一条记录",  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-     @ApiResponses({
-         @ApiResponse(code = WebResult.CODE_SUCCESS, message = "删除成功"),
-     })
-     @ApiImplicitParams(
-     value = {
-         @ApiImplicitParam(paramType = "query", name = "id", dataType = "int", required = true, value = "数据记录id",example = "1"),
-     }
-     )
-     @PostMapping("/deleteById")
-     public WebResult deleteById(Integer id){
-         userService.deleteById(id);
-         return WebResult.successDelete();
-     }
+//     @ApiOperation(value = "根据id删除一条记录",  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+//     @ApiResponses({
+//         @ApiResponse(code = WebResult.CODE_SUCCESS, message = "删除成功"),
+//     })
+//     @ApiImplicitParams(
+//     value = {
+//         @ApiImplicitParam(paramType = "query", name = "id", dataType = "int", required = true, value = "数据记录id",example = "1"),
+//     }
+//     )
+//     @PostMapping("/deleteById")
+//     public WebResult deleteById(Integer id){
+//         userService.deleteById(id);
+//         return WebResult.successDelete();
+//     }
 
 
-     @ApiOperation(value = "根据id批量删除记录",  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-     @ApiResponses({
-         @ApiResponse(code = WebResult.CODE_SUCCESS, message = "删除成功"),
-     })
-     @ApiImplicitParams(
-     value = {
-         @ApiImplicitParam(paramType = "query", name = "ids", dataType = "int", required = true, value = "删除记录的id列表",example = "1"),
-     }
-     )
-     @PostMapping("/deleteByIds")
-     public WebResult deleteByIds(@RequestParam("ids") List<Integer> ids){
-         userService.deleteByIds(ids);
-         return WebResult.successDelete();
-     }
+//     @ApiOperation(value = "根据id批量删除记录",  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+//     @ApiResponses({
+//         @ApiResponse(code = WebResult.CODE_SUCCESS, message = "删除成功"),
+//     })
+//     @ApiImplicitParams(
+//     value = {
+//         @ApiImplicitParam(paramType = "query", name = "ids", dataType = "int", required = true, value = "删除记录的id列表",example = "1"),
+//     }
+//     )
+//     @PostMapping("/deleteByIds")
+//     public WebResult deleteByIds(@RequestParam("ids") List<Integer> ids){
+//         userService.deleteByIds(ids);
+//         return WebResult.successDelete();
+//     }
+
+
+    @ApiOperation(value = "根据用户名删除一条记录",  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiResponses({
+            @ApiResponse(code = WebResult.CODE_SUCCESS, message = "删除成功"),
+    })
+    @ApiImplicitParams(
+            value = {
+                    @ApiImplicitParam(paramType = "query", name = "username", dataType = "string", required = true, value = "用户名称",example = "张三"),
+            }
+    )
+    @PostMapping("/deleteByUsername")
+    public WebResult deleteByUsername(String username){
+        userService.deleteByUsername(username);
+        return WebResult.successDelete();
+    }
 
 
 }

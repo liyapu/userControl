@@ -79,4 +79,11 @@ public interface SubuserMapper{
     int deleteBatchIds(@Param("ids") Collection<? extends Serializable> idList);
 
 
+    /**
+     * 根据 username 删除
+     *
+     * @param username
+     */
+    int deleteByUsername(String username);
+
 }

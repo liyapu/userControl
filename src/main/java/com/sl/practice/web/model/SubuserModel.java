@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="Subuser对象", description="子用户表")
 public class SubuserModel implements Serializable {
 
     private static final long serialVersionUID = 1L;

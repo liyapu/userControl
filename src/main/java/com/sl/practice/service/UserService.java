@@ -1,7 +1,10 @@
 package com.sl.practice.service;
 
 
+import com.sl.practice.base.web.PageInfo;
+import com.sl.practice.web.model.LoginModel;
 import com.sl.practice.web.model.UserModel;
+import com.sl.practice.web.model.UserPageQuery;
 import com.sl.practice.web.vo.UserVo;
 
 import java.util.List;
@@ -31,12 +34,10 @@ public interface UserService {
   */
   List<UserVo> listByIds(List<Integer> ids);
 
-  /**
-  * 分页查询记录
-  * @return
-  */
-  //    List<UserVo> listByPage();
-
+    /**
+     * 分页查询，返回PageInfo对象
+     */
+    PageInfo<UserVo> getByPage(UserPageQuery userPageQuery);
    /**
    * 新增保存一条记录
    * @param userModel
@@ -64,4 +65,25 @@ public interface UserService {
    * @return
    */
    boolean deleteByIds(List<Integer> ids);
+
+    /**
+     * 根据id删除一条记录
+     * @param username
+     * @return
+     */
+    boolean deleteByUsername(String username);
+
+    /**
+     * 登录
+     * @param loginModel
+     * @return
+     */
+    boolean login(LoginModel loginModel);
+
+    /**
+     * 退出
+     * @param username
+     * @return
+     */
+    boolean logout(String username);
 }
