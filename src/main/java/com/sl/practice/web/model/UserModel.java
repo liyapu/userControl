@@ -29,11 +29,16 @@ public class UserModel implements Serializable {
     @ApiModelProperty(value = "用户名", position = 1)
     private String username;
 
-
     @ApiModelProperty(value = "手机号", position = 2)
     private String phoneNumber;
 
-    private String isMaster;
+    @ApiModelProperty(value = "用户密码", position = 3)
+    private String password;
 
+    @ApiModelProperty(value = "是否是主账号  0:不是 1:是", position = 4)
+    private Integer isMaster;
+
+    @ApiModelProperty(value = "主账号id", position = 5)
+    private Integer masterId;
 
 }

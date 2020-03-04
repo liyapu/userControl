@@ -1,14 +1,24 @@
 package com.sl.practice.service.impl;
 
+import com.sl.practice.base.exception.BusinessException;
+import com.sl.practice.base.utils.CommonUtil;
+import com.sl.practice.base.utils.Md5Utils;
+import com.sl.practice.enitity.base.Relation;
+import com.sl.practice.enitity.base.Subuser;
 import com.sl.practice.enitity.base.User;
+import com.sl.practice.enums.StatusEnum;
+import com.sl.practice.mapper.base.RelationMapper;
+import com.sl.practice.mapper.base.SubuserMapper;
 import com.sl.practice.mapper.base.UserMapper;
 import com.sl.practice.service.UserService;
 import com.sl.practice.web.model.UserModel;
 import com.sl.practice.web.vo.UserVo;
+import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,10 +33,16 @@ import java.util.stream.Collectors;
  * @desc 
  */
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    RelationMapper relationMapper;
+    @Autowired
+    SubuserMapper subuserMapper;
+
 
    @Override
    public UserVo getById(Integer id) {
@@ -51,9 +67,78 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean save(UserModel userModel) {
        User user = new User();
+       String username = userModel.getUsername();
+       String password = userModel.getPassword();
+
+       if(StringUtils.isBlank(username)){
+           throw BusinessException.build("用户名不能为空");
+       }
+       if(StringUtils.isBlank(password)){
+           throw BusinessException.build("密码不能为空");
+       }
+       if(null == userModel.getIsMaster()){
+           throw BusinessException.build("是否是主账号字段不能为空");
+       }
+       username = username.trim();
+       password = password.trim();
+
        BeanUtils.copyProperties(userModel,user);
-       int rows  = userMapper.insert(user);
-       return rows > 0;
+
+        Relation relationDb = relationMapper.selectByUsername(username);
+        if(null != relationDb){
+            throw BusinessException.usernameExistErr();
+        }
+
+        Relation relation = new Relation();
+        relation.setUsername(username);
+        relation.setMaster(StatusEnum.YES.getCode());
+
+        if(StatusEnum.YES.getCode() == userModel.getIsMaster().intValue()){
+            //添加主账号
+            //主账号 才判断手机号
+            String phoneNumber = userModel.getPhoneNumber();
+            if(CommonUtil.isNotPhone(phoneNumber)){
+                throw BusinessException.build("请输入合法手机号");
+            }
+            User userDb = userMapper.selectByPhoneNumber(phoneNumber);
+            if(null != userDb){
+                throw BusinessException.build("此手机号用户已经注册过了,请重新输入");
+            }
+
+            relationMapper.insert(relation);
+            user.setSubNum(0);
+            user.setPassword(Md5Utils.generate(password));
+            user.setLoginState(StatusEnum.NO.getCode());
+            //新创建的账号，默认为有效
+            user.setStatus(StatusEnum.YES.getCode());
+
+            userMapper.insert(user);
+        }else{
+            //添加子账号
+            //子账号判断 主账号id是否有值
+            Integer masterId = userModel.getMasterId();
+            if(null == masterId){
+                throw BusinessException.build("主账号id不合法");
+            }
+            User userDb = userMapper.selectById(masterId);
+            if(null == userDb){
+                throw BusinessException.build("主账号id不合法");
+            }
+            relationMapper.insert(relation);
+
+            Subuser subuser = new Subuser();
+            BeanUtils.copyProperties(userModel,subuser);
+            subuser.setPassword(Md5Utils.generate(password));
+            subuser.setLoginState(StatusEnum.NO.getCode());
+            subuser.setMasterId(masterId);
+            //新创建的账号，默认为有效
+            subuser.setStatus(StatusEnum.YES.getCode());
+            subuserMapper.insert(subuser);
+
+            userMapper.incrSubNum(masterId);
+        }
+
+       return true;
     }
 
     @Override

@@ -47,6 +47,11 @@ public class Subuser implements Serializable {
     private Integer loginState;
 
     /**
+     * 用户状态 0:无效  1:有效
+     */
+    private Integer status;
+
+    /**
      * 创建时间
      */
     private LocalDateTime createTime;
@@ -56,10 +61,7 @@ public class Subuser implements Serializable {
      */
     private LocalDateTime updateTime;
 
-    /**
-     * 用户状态 0:无效  1:有效
-     */
-    private Integer status;
+
 
 
 }

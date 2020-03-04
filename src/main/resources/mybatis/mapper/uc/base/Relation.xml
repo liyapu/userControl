@@ -67,6 +67,13 @@
         ORDER BY  id ASC
     </select>
 
+    <select id="selectByUsername" resultType="com.sl.practice.enitity.base.Relation">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM relation
+        WHERE username = #{username}
+    </select>
+
     <delete id="deleteById">
         DELETE FROM relation
         WHERE id = #{id}

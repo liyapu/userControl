@@ -4,7 +4,7 @@ swagger:
 logging:
   config: classpath:logback-spring.xml
   level:
-    com.lyp.learn.mapper: DEBUG
+    com.sl.practice.mapper.base: DEBUG
     io.swagger.models.parameters.AbstractSerializableParameter: error
 
 spring:

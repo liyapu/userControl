@@ -2,7 +2,6 @@ package com.sl.practice.mapper.base;
 
 
 import com.sl.practice.enitity.base.Relation;
-import com.sl.practice.web.model.UserPageQuery;
 import org.apache.ibatis.annotations.Param;
 
 import java.io.Serializable;
@@ -35,6 +34,12 @@ public interface RelationMapper {
     List<Relation> selectBatchIds(@Param("ids") Collection<? extends Serializable> idList);
 
 
+    /**
+     * 根据 username 查询
+     *
+     * @param username
+     */
+    Relation selectByUsername(@Param("username") String username);
     /**
      * 插入一条记录
      *

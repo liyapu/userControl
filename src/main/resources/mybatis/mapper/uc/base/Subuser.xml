@@ -24,12 +24,12 @@
         <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO sub_user (username, password, master_id,login_state, status, create_time, update_time)
+        INSERT INTO subuser (username, password, master_id,login_state, status, create_time, update_time)
         VALUES (#{username}, #{password}, #{masterId},#{loginState},#{status},now(),now())
     </insert>
 
     <insert id="insertBatch"  parameterType="com.sl.practice.enitity.base.Subuser">
-        INSERT INTO sub_user ( <include refid="Base_Column_List" /> )
+        INSERT INTO subuser ( <include refid="Base_Column_List" /> )
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
             (null,#{item.username},#{item.password},#{item.masterId},#{item.loginState},#{item.status},now(),now())
@@ -39,14 +39,14 @@
     <select id="listByPage" parameterType="com.sl.practice.web.model.UserPageQuery" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM sub_user
+        FROM subuser
         WHERE status = #{status}
         ORDER BY id DESC
     </select>
 
 
     <update id="updateByIdSelective" parameterType="com.sl.practice.enitity.base.Subuser">
-        UPDATE sub_user
+        UPDATE subuser
         <set>
             <if test="username != null">
                 username = #{username},
@@ -71,14 +71,14 @@
     <select id="selectById" resultType="com.sl.practice.enitity.base.Subuser">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM sub_user
+        FROM subuser
         WHERE id = #{id}
     </select>
 
     <select id="selectBatchIds" resultType="com.sl.practice.enitity.base.Subuser">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM sub_user
+        FROM subuser
         WHERE id IN
         <foreach collection="ids" item="id" index="index" open="(" separator="," close=")">
             #{id}
@@ -87,12 +87,12 @@
     </select>
 
     <delete id="deleteById">
-        DELETE FROM sub_user
+        DELETE FROM subuser
         WHERE id = #{id}
     </delete>
 
     <delete id="deleteBatchIds">
-        DELETE FROM sub_user
+        DELETE FROM subuser
         WHERE id IN
         <foreach collection="ids" item="id" index="index" open="(" separator="," close=")">
             #{id}

@@ -34,6 +34,12 @@ public interface UserMapper {
 
 
     /**
+     * 根据 phoneNumber 查询
+     *
+     * @param phoneNumber
+     */
+    User selectByPhoneNumber(@Param("phoneNumber")String phoneNumber);
+    /**
      * 插入一条记录
      *
      * @param user 实体对象
@@ -67,6 +73,20 @@ public interface UserMapper {
      * @param user 实体对象
      */
     int updateByIdSelective(User user);
+
+    /**
+     * 增加用户的 子账号数量
+     * @param id
+     * @return
+     */
+    int incrSubNum(Integer id);
+
+    /**
+     * 减少用户的 子账号数量
+     * @param id
+     * @return
+     */
+    int descSubNum(Integer id);
 
     /**
      * 根据 ID 删除

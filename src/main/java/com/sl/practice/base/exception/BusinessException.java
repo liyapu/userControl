@@ -17,6 +17,10 @@ public class BusinessException extends BaseException{
         return new BusinessException(code, message);
     }
 
+    public static BusinessException build(String message) {
+        return new BusinessException(420, message);
+    }
+
     public static BusinessException build(ResultStatusEnum resultStatusEnum) {
         return new BusinessException(resultStatusEnum.getCode(), resultStatusEnum.getMsg());
     }
@@ -53,8 +57,12 @@ public class BusinessException extends BaseException{
         return build(420,"账号或密码错误" );
     }
 
-    public static BusinessException userNotExistErr(String userName) {
+    public static BusinessException userNotExistErr() {
         return build(420,"账户名不存在，请重新输入!");
+    }
+
+    public static BusinessException usernameExistErr() {
+        return build(420,"用户名已经存在，请修改并重新输入!");
     }
 
     public static BusinessException imgEmptyErr() {

@@ -9,8 +9,8 @@ import com.sl.practice.base.exception.BusinessException;
  * @date 2020-02-27 19:30
  */
 public enum StatusEnum {
-    NO(0, "否,无效,主账户,未确认"),
-    YES(1, "是,有效,子账号,已经确认");
+    NO(0, "否,无效,子账号,未确认,未登录"),
+    YES(1, "是,有效,主账号,已经确认,已经登录");
     private int code;
     private String desc;
 
